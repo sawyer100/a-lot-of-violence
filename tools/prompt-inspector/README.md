@@ -47,7 +47,6 @@ Only use an upstream you trust. Requests may contain character cards, chat histo
 
 - Terminal output only.
 - No persistence or searchable history.
-- No automatic redaction of sensitive prompt content.
 - Assumes an OpenAI-compatible `/v1/chat/completions` request shape.
 - Streaming responses are relayed but the tool does not provide a special streaming UI.
 
@@ -72,4 +71,6 @@ go run . -redactor ./redactor/target/release/prompt-redactor
 
 The Go server pipes displayed prompt text through the Rust helper before printing it. Redaction affects terminal display only; forwarding still uses the original request body so enabling the helper does not silently alter provider requests.
 
-The current Rust rules are intentionally small and should be expanded before treating the output as safe to publish.
+The bundled redactor currently recognizes several common credential shapes, including OpenAI-style `sk-` keys, GitHub `ghp_` and `github_pat_` tokens, Slack-style `xox*` tokens, AWS-style `AKIA` identifiers, Bearer/Basic authorization values, and common `api_key` / `access_token` / `token` key-value forms.
+
+Redaction is best-effort, not a guarantee that output is safe to publish. Providers can use credential formats the tool does not recognize, so inspect captured output before sharing it.
