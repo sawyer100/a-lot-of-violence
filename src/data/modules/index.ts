@@ -10,6 +10,8 @@ import { saySomethingHorrible } from './saySomethingHorrible'
 import { theQuietPart } from './theQuietPart'
 import { stopSmirking } from './stopSmirking'
 import { youreCooked } from './youreCooked'
+import { physicalMomentum } from './physicalMomentum'
+import { godcomplex } from './godcomplex'
 
 /*
  * The module registry. The home page, navigation, routes and documentation
@@ -33,6 +35,8 @@ export const modules: ModuleDefinition[] = [
   maliceAforethought,
   theQuietPart,
   extremeViolence,
+  physicalMomentum,
+  godcomplex,
 ]
 
 export function findModule(slug: string): ModuleDefinition | undefined {
