@@ -135,3 +135,45 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: clamp(40px, 5vw, 72px);
+}
+
+.pagination button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  background: #000;
+  color: inherit;
+  font: 700 0.875rem/1 var(--font-mono);
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease;
+}
+
+.pagination button:hover:not(:disabled),
+.pagination button:focus-visible {
+  border-color: var(--accent-bright);
+}
+
+.pagination button:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 2px;
+}
+
+.pagination button.currentPage {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
