@@ -15,5 +15,5 @@ const bySlug = new Map(
 )
 
 export function catalogueImage(slug: string): string | undefined {
-  return bySlug.get(slug)
+  return bySlug.get(slug) ?? bySlug.get(slug.replace(/-/g, '_'))
 }
