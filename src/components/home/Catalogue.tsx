@@ -1,4 +1,4 @@
-import { type PointerEvent } from 'react'
+import { useState, type PointerEvent } from 'react'
 import { catalogueImage } from '../../data/catalogueImages'
 import { modules } from '../../data/modules'
 import { Link } from '../../router/Link'
@@ -9,6 +9,7 @@ import styles from './Catalogue.module.css'
 
 /** Keep the home page compact; the full catalogue lives on the script pages. */
 const HOME_LIMIT = 6
+const PAGE_SIZE = 9
 
 /*
  * Leans a tile toward the pointer. The position goes straight into CSS
@@ -32,7 +33,16 @@ function settle(event: PointerEvent<HTMLLIElement>) {
  * experience at the first script, where ScriptRail exposes every module.
  */
 export function Catalogue({ showAll = false }: { showAll?: boolean }) {
-  const visible = showAll ? modules : modules.slice(0, HOME_LIMIT)
+  const [page, setPage] = useState(1)
+  const pageCount = Math.ceil(modules.length / PAGE_SIZE)
+  const currentPage = Math.min(page, Math.max(1, pageCount))
+  const visible = showAll
+    ? modules.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+    : modules.slice(0, HOME_LIMIT)
+
+  function goToPage(nextPage: number) {
+    setPage(Math.max(1, Math.min(nextPage, pageCount)))
+  }
 
   return (
     <section className={styles.catalogue} aria-label="Catalogue">
@@ -58,6 +68,29 @@ export function Catalogue({ showAll = false }: { showAll?: boolean }) {
             )
           })}
         </ul>
+
+        {showAll && pageCount > 1 && (
+          <nav className={styles.pagination} aria-label="Script catalogue pages">
+            <button type="button" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+              Previous
+            </button>
+            {Array.from({ length: pageCount }, (_, index) => index + 1).map((number) => (
+              <button
+                key={number}
+                type="button"
+                onClick={() => goToPage(number)}
+                aria-label={`Page ${number}`}
+                aria-current={currentPage === number ? 'page' : undefined}
+                className={currentPage === number ? styles.currentPage : undefined}
+              >
+                {number}
+              </button>
+            ))}
+            <button type="button" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === pageCount}>
+              Next
+            </button>
+          </nav>
+        )}
 
         {!showAll && modules.length > HOME_LIMIT && (
           <div className={styles.more}>
